@@ -1,0 +1,47 @@
+Group A episode extension report
+Inputs: C:\Users\udayd\OneDrive\Desktop\deep learning\data\group_a_original_indices\prices.csv, C:\Users\udayd\OneDrive\Desktop\deep learning\data\group_a_original_indices\returns.csv, C:\Users\udayd\OneDrive\Desktop\deep learning\data\group_a_original_indices\tda_norms.csv
+Date range: 1997-01-03 to 2026-09-21 (7475 prices)
+N=15 forward-min drawdown theta (full-sample 2% quantile): -0.1141326196 (-11.4133%)
+Valid forward-label days: 7460; positive days: 150; episodes: 31
+Episode padding: 5 trading observations on each side where available; padding is reporting/search context only.
+CSD methodology: sample variance (ddof=1), pandas unbiased skew, lag-1 autocorrelation, and refit normal GARCH(1,1) with returns scaled by 100.
+TDA methodology is not rerun or altered: existing landscape_l1 values are read from tda_norms.csv.
+Diagnostics use the preceding 100 available indicator observations and threshold mean + 1.5 sample SD; no detection decision is made.
+
+Episodes (start, end, peak-to-trough decline):
+E1: 1998-08-10 to 1998-08-10, peak 1998-08-10, trough 1998-08-10, decline 0.00%
+E2: 1998-08-12 to 1998-08-12, peak 1998-08-12, trough 1998-08-12, decline 0.00%
+E3: 1998-08-17 to 1998-08-26, peak 1998-08-18, trough 1998-08-21, decline -1.81%
+E4: 2001-03-07 to 2001-03-08, peak 2001-03-08, trough 2001-03-08, decline 0.00%
+E5: 2001-08-22 to 2001-09-06, peak 2001-08-24, trough 2001-09-06, decline -6.63%
+E6: 2001-09-10 to 2001-09-10, peak 2001-09-10, trough 2001-09-10, decline 0.00%
+E7: 2002-06-27 to 2002-07-17, peak 2002-06-27, trough 2002-07-16, decline -9.05%
+E8: 2002-09-16 to 2002-09-16, peak 2002-09-16, trough 2002-09-16, decline 0.00%
+E9: 2008-09-08 to 2008-09-08, peak 2008-09-08, trough 2008-09-08, decline 0.00%
+E10: 2008-09-11 to 2008-09-12, peak 2008-09-12, trough 2008-09-12, decline 0.00%
+E11: 2008-09-16 to 2008-10-08, peak 2008-09-19, trough 2008-10-08, decline -21.52%
+E12: 2008-10-13 to 2008-10-14, peak 2008-10-13, trough 2008-10-14, decline -0.53%
+E13: 2008-10-20 to 2008-10-20, peak 2008-10-20, trough 2008-10-20, decline 0.00%
+E14: 2008-10-29 to 2008-11-18, peak 2008-11-04, trough 2008-11-17, decline -15.41%
+E15: 2009-01-02 to 2009-01-06, peak 2009-01-06, trough 2009-01-06, decline 0.00%
+E16: 2009-01-08 to 2009-01-08, peak 2009-01-08, trough 2009-01-08, decline 0.00%
+E17: 2009-02-05 to 2009-02-20, peak 2009-02-09, trough 2009-02-20, decline -11.48%
+E18: 2009-02-24 to 2009-02-25, peak 2009-02-24, trough 2009-02-25, decline -1.07%
+E19: 2011-07-18 to 2011-08-01, peak 2011-07-22, trough 2011-08-01, decline -4.32%
+E20: 2018-11-29 to 2018-12-06, peak 2018-12-03, trough 2018-12-06, decline -3.38%
+E21: 2020-02-06 to 2020-02-06, peak 2020-02-06, trough 2020-02-06, decline 0.00%
+E22: 2020-02-10 to 2020-03-11, peak 2020-02-19, trough 2020-03-11, decline -19.04%
+E23: 2020-03-13 to 2020-03-13, peak 2020-03-13, trough 2020-03-13, decline 0.00%
+E24: 2020-03-17 to 2020-03-17, peak 2020-03-17, trough 2020-03-17, decline 0.00%
+E25: 2022-04-20 to 2022-04-20, peak 2022-04-20, trough 2022-04-20, decline 0.00%
+E26: 2022-05-27 to 2022-05-27, peak 2022-05-27, trough 2022-05-27, decline 0.00%
+E27: 2022-06-02 to 2022-06-02, peak 2022-06-02, trough 2022-06-02, decline 0.00%
+E28: 2022-06-07 to 2022-06-07, peak 2022-06-07, trough 2022-06-07, decline 0.00%
+E29: 2022-09-09 to 2022-09-12, peak 2022-09-12, trough 2022-09-12, decline 0.00%
+E30: 2025-03-19 to 2025-03-27, peak 2025-03-25, trough 2025-03-27, decline -1.44%
+E31: 2025-04-01 to 2025-04-02, peak 2025-04-02, trough 2025-04-02, decline 0.00%
+
+Episode-level outcome counts (earliest first exceedance across windows): TDA earlier than both CSD metrics=4; CSD wins=7; neither=4; ties/ambiguous=16.
+Crash-type interpretation: these empirical episodes are threshold-defined drawdown clusters, not named-crash truth labels.
+Any lead-time differences are descriptive and can reflect metric scale, missing early windows, padding, and the chosen baseline; they do not establish predictive power or causality.
+Outputs: episode_diagnostics.csv, csd_indicators_extended.csv, full_history_extended.png, episode_grid.png, lead_time_comparison.png, episode_extension_report.txt.

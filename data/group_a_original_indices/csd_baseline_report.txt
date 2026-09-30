@@ -1,0 +1,10 @@
+Classical CSD baseline report
+Input: C:\Users\udayd\OneDrive\Desktop\deep learning\data\group_a_original_indices\returns.csv
+Reference: ^GSPC; date range 1997-01-03 to 2026-09-21
+Rolling window: 50 trading days
+Variance uses sample variance (ddof=1); skewness is pandas unbiased sample skewness.
+GARCH is refit on every rolling window, with a constant mean and normal GARCH(1,1).
+GARCH optimization uses returns scaled by 100 and volatility is reported in raw daily-return units.
+GARCH missing estimates: 0
+This is a descriptive baseline, not a tuned crisis detector; no thresholds or parameter selection used crisis dates.
+The plot uses the same shaded periods and S&P 500 reference style as the TDA plot.

@@ -1,0 +1,30 @@
+Paper method verification and Group A extension
+
+STAGE 1 — exact parameters from the full paper
+- Empirical data: adjusted-close index values; forward daily log-return log(P_i/P_{i-1}).
+- The supplied Group A CSV is the prior pipeline's Close-derived series; no alternate Group A source was introduced. This is a data-source limitation relative to the paper's adjusted-close wording, not a method change.
+- Point cloud: w consecutive raw daily-log-return vectors in R^4; no rolling z-score, smoothing, or other preprocessing is specified.
+- Windows: w=50 and w=100 trading days; one-day sliding step.
+- Filtration: Vietoris-Rips on the Euclidean point cloud; H1 loops; landscape L1 and L2 norms.
+- Original cases: technology crash date 2000-03-10 and Lehman bankruptcy date 2008-09-15.
+- Figure 10 displays 1,000 trading days prior to each event; the paper describes norm growth before a primary peak qualitatively.
+- The quantitative early-warning statistic is a rising low-frequency average spectral density over the 250 trading days before each event (Kendall tau 0.89 and 1.00).
+
+Corrections to the prior implementation:
+- Removed within-window per-index z-scoring, which was not part of the paper's empirical method.
+- Locked windows to the paper's w=50 and w=100; n=30 is not a paper parameter.
+- Used exact landscape integrals from the H1 bars rather than a finite grid approximation.
+
+Original-case diagnostics:
+dotcom_2000: paper 1000-trading-day display window 1997-03-14 to 2000-03-10; L1 peak 2000-03-03 (value=2.66658e-05); pre-event max=2.66658e-05; event-window max=2.66658e-05
+gfc_lehman_2008: paper 1000-trading-day display window 2004-09-27 to 2008-09-15; L1 peak 2008-08-27 (value=1.28433e-05); pre-event max=1.28433e-05; event-window max=1.28433e-05
+Assessment: both original cases show a clear increase in L1/L2 magnitude into the crisis-era primary peak under the corrected raw-return method. The exact peak can occur after the named event date because the paper's claim concerns growth before and ascent during a crash, not a peak exactly on the event date. The result is therefore qualitatively consistent, while the exact amplitudes depend on the Yahoo-derived data and implementation.
+
+STAGE 2 — post-2009 extension
+The same raw-return, Euclidean-Rips, H1, w=50/100 method was applied without parameter changes to: dotcom_2000, gfc_lehman_2008, us_downgrade_2011, selloff_2015_2016, selloff_2018_12, covid_2020, bear_2022. See one PNG per period and all_periods_combined.png.
+Descriptive period assessments (a supportive rise means the L1 peak within the stated period exceeds its first value; no tuning or statistical threshold was added):
+us_downgrade_2011: w=50: supportive rise, L1 peak 2011-10-28 (5.96251e-06), start=7.92569e-07; w=100: supportive rise, L1 peak 2011-10-21 (5.11592e-06), start=2.25311e-06
+selloff_2015_2016: w=50: supportive rise, L1 peak 2015-12-14 (7.86793e-06), start=1.79913e-06; w=100: supportive rise, L1 peak 2015-12-17 (6.5465e-06), start=1.91591e-06
+selloff_2018_12: w=50: no clear rise, L1 peak 2018-12-03 (4.08158e-06), start=4.08158e-06; w=100: supportive rise, L1 peak 2018-12-28 (6.67651e-06), start=5.05219e-06
+covid_2020: w=50: supportive rise, L1 peak 2020-02-25 (2.28818e-06), start=6.63016e-07; w=100: supportive rise, L1 peak 2020-03-20 (2.40108e-06), start=1.4562e-06
+bear_2022: w=50: supportive rise, L1 peak 2022-06-02 (8.31724e-06), start=3.14918e-06; w=100: supportive rise, L1 peak 2022-04-20 (1.70307e-05), start=7.84783e-06

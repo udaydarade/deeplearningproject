@@ -1,0 +1,40 @@
+# Python environments and caches
+.venv/
+venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pytype/
+.ipynb_checkpoints/
+
+# Packaging and local build output
+*.egg-info/
+build/
+dist/
+*.whl
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Logs and editor/OS metadata
+*.log
+.coverage
+coverage.xml
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# Regenerated output from the cross-asset extension.
+# Source CSV inputs elsewhere under data/ remain trackable.
+data/extension/

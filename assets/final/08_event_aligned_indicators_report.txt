@@ -1,0 +1,11 @@
+ASSET 8 NOT GENERATED AS A RESULTS FIGURE
+=========================================
+
+The repository does not contain a common-label event-aligned table with
+TDA L1, TDA L2, AC1, variance, and MPS on a shared -60..+20 crash-day
+axis. Existing outputs are full-history indicator series and separate
+episode diagnostics, not a common event-aligned panel.
+
+No event-aligned figure was fabricated. A valid figure requires a
+predefined event list, one common trading-day alignment, and a documented
+normalization/aggregation rule before plotting median traces or bands.

@@ -1,0 +1,18 @@
+OBJECTIVE CRASH DETECTION — group_c_international
+====================================================
+
+Epsilon reversal filter: 1.00%.
+The exponential bulk fraction was selected by minimizing the one-sample KS distance across 50%–95% candidate lower-tail fractions.
+Crash cutoff: per-drawdown tail alpha = 0.05 / n_drawdowns (Bonferroni family-wise error control at 5%).
+
+Fitted parameters and independent episodes by reference series
+-------------------------------------------------------------
+000001.SS: n=38, bulk_n=36, lambda=17.336, cutoff=38.2632%, per_drawdown_alpha=0.00132, crashes=2, KS=0.1352
+^BSESN: n=101, bulk_n=96, lambda=20.3695, cutoff=37.3639%, per_drawdown_alpha=0.000495, crashes=4, KS=0.1777
+^BVSP: n=79, bulk_n=75, lambda=17.2627, cutoff=42.6654%, per_drawdown_alpha=0.000633, crashes=4, KS=0.1476
+^FTSE: n=39, bulk_n=37, lambda=19.171, cutoff=34.7362%, per_drawdown_alpha=0.00128, crashes=2, KS=0.1569
+^GDAXI: n=73, bulk_n=69, lambda=19.5143, cutoff=37.3377%, per_drawdown_alpha=0.000685, crashes=4, KS=0.1630
+^HSI: n=21, bulk_n=17, lambda=22.3223, cutoff=27.0593%, per_drawdown_alpha=0.00238, crashes=4, KS=0.1614
+^N225: n=45, bulk_n=42, lambda=19.2954, cutoff=35.2539%, per_drawdown_alpha=0.00111, crashes=2, KS=0.1710
+
+A crash is an epsilon-filtered local peak-to-trough drawdown whose fitted exponential survival probability is below the calibrated per-drawdown alpha. Recovery dates are the first subsequent close at or above the episode's peak; blank means not recovered in-sample.

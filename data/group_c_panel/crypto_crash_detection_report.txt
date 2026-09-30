@@ -1,0 +1,16 @@
+OBJECTIVE CRASH DETECTION — group_c_crypto
+=============================================
+
+Epsilon reversal filter: 1.00%.
+The exponential bulk fraction was selected by minimizing the one-sample KS distance across 50%–95% candidate lower-tail fractions.
+Crash cutoff: per-drawdown tail alpha = 0.05 / n_drawdowns (Bonferroni family-wise error control at 5%).
+
+Fitted parameters and independent episodes by reference series
+-------------------------------------------------------------
+BNB-USD: n=45, bulk_n=43, lambda=10.3643, cutoff=65.6329%, per_drawdown_alpha=0.00111, crashes=1, KS=0.0816
+BTC-USD: n=41, bulk_n=39, lambda=10.879, cutoff=61.6721%, per_drawdown_alpha=0.00122, crashes=1, KS=0.0844
+ETH-USD: n=36, bulk_n=34, lambda=10.0507, cutoff=65.4609%, per_drawdown_alpha=0.00139, crashes=2, KS=0.0755
+SOL-USD: n=31, bulk_n=27, lambda=8.48949, cutoff=75.7374%, per_drawdown_alpha=0.00161, crashes=2, KS=0.0792
+XRP-USD: n=14, bulk_n=9, lambda=10.1911, cutoff=55.2910%, per_drawdown_alpha=0.00357, crashes=3, KS=0.1055
+
+A crash is an epsilon-filtered local peak-to-trough drawdown whose fitted exponential survival probability is below the calibrated per-drawdown alpha. Recovery dates are the first subsequent close at or above the episode's peak; blank means not recovered in-sample.

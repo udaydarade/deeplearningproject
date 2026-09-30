@@ -1,0 +1,10 @@
+indicator,method,threshold
+ac1,kendall,0.4213012048192772
+ac1,pearson,0.7936266289062309
+ac1,spearman,0.706441127058033
+variance,kendall,0.8876144578313254
+variance,pearson,0.15312614195647872
+variance,spearman,0.9713201171218739
+mps_low_frequency,kendall,0.6912449799196788
+mps_low_frequency,pearson,0.8504706095134811
+mps_low_frequency,spearman,0.8830478567657081

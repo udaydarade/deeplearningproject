@@ -1,0 +1,15 @@
+OBJECTIVE CRASH DETECTION — group_a_original_indices
+=======================================================
+
+Epsilon reversal filter: 1.00%.
+The exponential bulk fraction was selected by minimizing the one-sample KS distance across 50%–95% candidate lower-tail fractions.
+Crash cutoff: per-drawdown tail alpha = 0.05 / n_drawdowns (Bonferroni family-wise error control at 5%).
+
+Fitted parameters and independent episodes by reference series
+-------------------------------------------------------------
+^DJI: n=104, bulk_n=99, lambda=26.0436, cutoff=29.3358%, per_drawdown_alpha=0.000481, crashes=3, KS=0.2193
+^GSPC: n=120, bulk_n=114, lambda=28.1545, cutoff=27.6447%, per_drawdown_alpha=0.000417, crashes=3, KS=0.2442
+^IXIC: n=99, bulk_n=94, lambda=20.9382, cutoff=36.2536%, per_drawdown_alpha=0.000505, crashes=2, KS=0.1810
+^RUT: n=99, bulk_n=94, lambda=22.2954, cutoff=34.0467%, per_drawdown_alpha=0.000505, crashes=4, KS=0.1936
+
+A crash is an epsilon-filtered local peak-to-trough drawdown whose fitted exponential survival probability is below the calibrated per-drawdown alpha. Recovery dates are the first subsequent close at or above the episode's peak; blank means not recovered in-sample.

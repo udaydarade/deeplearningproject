@@ -1,0 +1,22 @@
+OBJECTIVE CRASH DETECTION — group_c_sector
+=============================================
+
+Epsilon reversal filter: 1.00%.
+The exponential bulk fraction was selected by minimizing the one-sample KS distance across 50%–95% candidate lower-tail fractions.
+Crash cutoff: per-drawdown tail alpha = 0.05 / n_drawdowns (Bonferroni family-wise error control at 5%).
+
+Fitted parameters and independent episodes by reference series
+-------------------------------------------------------------
+XLB: n=37, bulk_n=35, lambda=21.031, cutoff=31.4139%, per_drawdown_alpha=0.00135, crashes=1, KS=0.1650
+XLC: n=38, bulk_n=36, lambda=22.7412, cutoff=29.1687%, per_drawdown_alpha=0.00132, crashes=2, KS=0.1864
+XLE: n=25, bulk_n=23, lambda=18.8615, cutoff=32.9487%, per_drawdown_alpha=0.002, crashes=1, KS=0.1760
+XLF: n=44, bulk_n=42, lambda=22.0749, cutoff=30.7133%, per_drawdown_alpha=0.00114, crashes=1, KS=0.2008
+XLI: n=49, bulk_n=47, lambda=23.8063, cutoff=28.9316%, per_drawdown_alpha=0.00102, crashes=1, KS=0.1924
+XLK: n=65, bulk_n=62, lambda=21.5264, cutoff=33.3086%, per_drawdown_alpha=0.000769, crashes=1, KS=0.1825
+XLP: n=30, bulk_n=29, lambda=21.6129, cutoff=29.5978%, per_drawdown_alpha=0.00167, crashes=0, KS=0.1957
+XLRE: n=28, bulk_n=27, lambda=21.3046, cutoff=29.7022%, per_drawdown_alpha=0.00179, crashes=2, KS=0.1930
+XLU: n=31, bulk_n=29, lambda=20.4626, cutoff=31.4217%, per_drawdown_alpha=0.00161, crashes=1, KS=0.1609
+XLV: n=41, bulk_n=39, lambda=25.0619, cutoff=26.7709%, per_drawdown_alpha=0.00122, crashes=1, KS=0.1964
+XLY: n=35, bulk_n=33, lambda=17.4411, cutoff=37.5612%, per_drawdown_alpha=0.00143, crashes=1, KS=0.1498
+
+A crash is an epsilon-filtered local peak-to-trough drawdown whose fitted exponential survival probability is below the calibrated per-drawdown alpha. Recovery dates are the first subsequent close at or above the episode's peak; blank means not recovered in-sample.

@@ -1,0 +1,11 @@
+numpy
+pandas
+scipy
+scikit-learn
+statsmodels
+matplotlib
+requests
+arch
+ripser
+yfinance
+pandas_datareader

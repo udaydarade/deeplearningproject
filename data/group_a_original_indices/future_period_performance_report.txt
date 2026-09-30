@@ -1,0 +1,196 @@
+FUTURE-PERIOD PERFORMANCE OF THE GIDEA–KATZ METHOD
+===================================================
+
+Scope
+-----
+This report evaluates the unchanged Group A method after the original
+paper's study period. It uses only the four original indices and the
+already-computed raw-return TDA outputs:
+
+  - four-dimensional daily log-return point clouds;
+  - Euclidean Vietoris–Rips H1 persistence;
+  - persistence-landscape L1 and L2 norms;
+  - w=50 and w=100 trading-day point-cloud windows.
+
+No parameter was changed after the original-paper verification. The
+periods tested are:
+
+  1. 2011 US downgrade / debt-ceiling stress
+  2. August 2015–February 2016 selloff
+  3. December 2018 selloff
+  4. February–March 2020 COVID crash
+  5. 2022 bear market
+
+Meaning of "detected"
+---------------------
+The original paper did not define a binary detector or an alarm threshold.
+It described a supportive warning pattern when the TDA norm rose before or
+during a crash and reached a primary peak during the stress period.
+
+Accordingly, the results below are descriptive:
+
+  supportive rise = the norm at the largest point in the stated period
+                    exceeded its value at the beginning of that period;
+  no clear rise    = that condition was not met for that window.
+
+This is not a forecast accuracy score. It is not possible to calculate
+precision, recall, false-alarm rate, or a valid lead time from the paper's
+original procedure because it supplied no real-time threshold, no
+non-crash control rule, and no alarm date.
+
+Results by future period
+------------------------
+
+2011 US downgrade / debt-ceiling stress
+  w=50: supportive rise
+    start L1 = 7.92569e-07
+    peak L1  = 5.96251e-06
+    peak date = 2011-10-28
+  w=100: supportive rise
+    start L1 = 2.25311e-06
+    peak L1  = 5.11592e-06
+    peak date = 2011-10-21
+  Interpretation: both window sizes show a larger topological norm during
+  the stress interval. This is consistent with the paper's descriptive
+  pattern, but the peak occurs after the July/August stress began, so the
+  result is not evidence of an exact advance forecast.
+
+August 2015–February 2016 selloff
+  w=50: supportive rise
+    start L1 = 1.79913e-06
+    peak L1  = 7.86793e-06
+    peak date = 2015-12-14
+  w=100: supportive rise
+    start L1 = 1.91591e-06
+    peak L1  = 6.54650e-06
+    peak date = 2015-12-17
+  Interpretation: both windows show a substantial increase. The peak is
+  later in the selloff rather than clearly preceding its first shock.
+
+December 2018 selloff
+  w=50: no clear rise
+    start L1 = 4.08158e-06
+    peak date = 2018-12-03
+    The period began at the observed maximum for this window.
+  w=100: supportive rise
+    start L1 = 5.05219e-06
+    peak L1  = 6.67651e-06
+    peak date = 2018-12-28
+  Interpretation: this is window-sensitive. w=100 rises, while w=50 does
+  not. The unchanged method therefore does not give a robust warning
+  classification for this episode.
+
+February–March 2020 COVID crash
+  w=50: supportive rise
+    start L1 = 6.63016e-07
+    peak L1  = 2.28818e-06
+    peak date = 2020-02-25
+  w=100: supportive rise
+    start L1 = 1.45620e-06
+    peak L1  = 2.40108e-06
+    peak date = 2020-03-20
+  Interpretation: w=50 reaches a peak during the initial crash phase and
+  w=100 peaks later. This shows a strong stress response, but the timing
+  is not uniformly an advance signal: the w=100 maximum occurs after the
+  crash had already developed.
+
+2022 bear market
+  w=50: supportive rise
+    start L1 = 3.14918e-06
+    peak L1  = 8.31724e-06
+    peak date = 2022-06-02
+  w=100: supportive rise
+    start L1 = 7.84783e-06
+    peak L1  = 1.70307e-05
+    peak date = 2022-04-20
+  Interpretation: both windows show an increase, with w=100 peaking
+  earlier than w=50. This is consistent with an early-warning-like
+  increase, but the event was a long multi-month bear market, so the
+  exact onset and forecast horizon are ambiguous.
+
+Aggregate result
+----------------
+Across the five future periods:
+
+  w=50:
+    supportive rise = 4 of 5 periods
+    no clear rise    = 1 of 5 periods
+
+  w=100:
+    supportive rise = 5 of 5 periods
+    no clear rise    = 0 of 5 periods
+
+  both w=50 and w=100 supportive = 4 of 5 periods
+  window-sensitive result         = 1 of 5 periods (December 2018)
+
+This means the method often responds to periods that were already
+stressful. It does not mean that it successfully predicted all five
+events in advance. The post-2011 results measure retrospective
+within-period escalation, not a pre-registered out-of-sample alarm.
+
+What was detected previously?
+--------------------------------
+The original two cases provide the comparison:
+
+  Dot-com 2000:
+    The corrected raw-return TDA norm rises and reaches a primary peak
+    shortly before the named event, so it is qualitatively supportive.
+    However, the supplied data starts in 1997 and provides only 205 of
+    the requested 250 pre-event diagnostic rows. The low-frequency
+    statistic is not a clean, fully specified monotonic signal in this
+    rerun.
+
+  Lehman 2008:
+    The TDA norm rises before the event and the rolling variance and
+    low-frequency power increase very strongly. This is the strongest
+    retrospective warning pattern in the available results.
+
+Thus, of the seven named periods considered in the paper-style analysis
+(two original cases plus five later periods), the TDA curves show a
+supportive within-period rise in both windows for six cases if the
+reported post-2011 extension is combined with the original qualitative
+assessment. December 2018 is the only future period that is clearly
+window-sensitive. This is a count of descriptive rises, not a count of
+successfully predicted crashes.
+
+Why this is not proof of complete predictability
+------------------------------------------------
+1. The periods are selected after the fact and are known before the
+   curves are examined.
+2. A rise can be observed during an ordinary volatile period as well as
+   during a crash. Without a fixed threshold and control sample, the
+   rise cannot be scored as a unique warning.
+3. The method's w=50 and w=100 peaks often occur during the selloff or
+   after the first shock, rather than clearly beforehand.
+4. The December 2018 result changes when the window changes from 50 to
+   100 days.
+5. The original paper's low-frequency cutoff is not specified, so the
+   spectral diagnostic is not an exact numerical replication.
+6. The five future periods are not independent identically defined
+   events: they include sudden shocks, multi-month selloffs, and a long
+   bear market.
+
+Final assessment
+----------------
+The unchanged method has useful descriptive sensitivity to elevated
+cross-index stress: it shows increased topological activity in most of
+the later periods, and it is particularly compelling for the 2008 crisis.
+Its observed post-2011 response rate is 4/5 for w=50 and 5/5 for w=100
+under the deliberately weak definition "norm rose somewhere within the
+named period."
+
+The scientifically defensible conclusion is therefore:
+
+  "The method frequently detects that a market-stress episode is underway
+   or intensifying, but these results do not establish that the episode
+   was completely predictable beforehand. A genuine detection study must
+   choose thresholds using only prior data, define the allowable lead
+   time, include normal periods, and evaluate many crash and non-crash
+   episodes out of sample."
+
+Source outputs used
+-------------------
+  - data/group_a_original_indices/paper_extension_report.txt
+  - data/group_a_original_indices/paper_exact_detection_explanation.txt
+  - data/group_a_original_indices/tda_norms_paper_method.csv
+  - data/group_a_original_indices/paper_reproduction_figures/

@@ -1,0 +1,176 @@
+GIDEA–KATZ REPRODUCTION: WHAT THE VALUES ACTUALLY SHOW
+========================================================
+
+Purpose
+-------
+This document explains the numerical results in
+paper_exact_250day_diagnostics.csv. It is deliberately evidence-first:
+the paper's method is reproduced as far as the available data and the
+paper's stated definitions permit, but the results are not converted into
+a stronger prediction claim than the values support.
+
+The most important conclusion is:
+
+    These indicators did not make both historical crashes completely
+    predictable. They provide retrospective early-warning evidence for
+    some events, especially the 2008 Lehman period, but they do not define
+    an operational alarm date and they do not produce the same pattern for
+    the 2000 dot-com period in this rerun.
+
+What the paper actually measured
+--------------------------------
+1. The four daily log-return series (S&P 500, DJIA, NASDAQ, Russell 2000)
+   are treated jointly as points in R^4.
+2. A Vietoris–Rips filtration is computed for rolling point clouds of
+   w=50 trading days. w=100 is a robustness check.
+3. H1 persistence landscapes are summarized by L1 and L2 norms.
+4. The paper does not say "raise an alarm when L1 exceeds X". There is no
+   binary TDA threshold, no classifier, and no forecast date.
+5. The paper then computes, in a separate 500-trading-day rolling window
+   over the norm series:
+       - variance,
+       - average low-frequency spectral density,
+       - lag-1 autocorrelation.
+6. Those statistics are inspected over the 250 trading days before two
+   already-known dates: 2000-03-10 and 2008-09-15. The paper uses a
+   Mann–Kendall trend statistic to quantify the visual trend.
+
+Therefore "predictable" in the paper means "a retrospective upward trend
+was visible before a known event", not "the method generated a validated
+real-time signal with known false-alarm and missed-event rates."
+
+Data and reproducibility limits
+-------------------------------
+The supplied Group A data starts in 1997. The paper's data starts in 1987.
+Consequently, the dot-com case has only 205 valid pre-event rows in the
+CSV, rather than the full 250 rows requested by the paper's design. The
+Lehman case has the full 250 rows.
+
+The downloaded price file is the project's existing Close-price file. The
+paper describes adjusted closing values downloaded from Yahoo Finance.
+That distinction can change returns and persistence diagrams, especially
+around corporate actions.
+
+The paper says "average spectral density at low frequencies" but does not
+give a numerical frequency cutoff in the text or source. This rerun uses
+the mean of the first five nonzero FFT bins. That is a transparent,
+reproducible assumption, not a claim that the exact unpublished cutoff has
+been recovered.
+
+Observed values: dot-com case
+-----------------------------
+Event date: 2000-03-10
+Available diagnostic interval: 1999-05-19 through 2000-03-09
+Available observations: 205 trading days
+
+TDA L1, w=50:
+  first value = 0.000006769
+  last value  = 0.000022408
+  maximum     = 0.000026666 on 2000-03-03
+
+TDA L1, w=100:
+  first value = 0.000013760
+  last value  = 0.000031370
+  maximum     = 0.000033695 on 2000-03-01
+
+500-day statistics of the w=50 norm:
+  variance:
+    first = 1.505e-11
+    last  = 2.343e-11
+    Kendall tau toward the event = +0.258
+  low-frequency spectral power:
+    first = 4.498e-10
+    last  = 4.570e-10
+    maximum occurred on 1999-07-30, not immediately before the event
+    Kendall tau toward the event = +0.678 in the existing report
+  lag-1 ACF:
+    first = 0.9273
+    last  = 0.9271
+    Kendall tau toward the event = +0.723 in the existing report
+
+Interpretation:
+  The TDA norms rise overall and peak shortly before the event, so the
+  figure can be read as retrospective evidence of increasing topological
+  activity. However, the available interval is shorter than the paper's
+  250-day interval, the low-frequency curve is not a clean monotone climb
+  into 2000-03-10, and the reported diagnostic trends are sensitive to the
+  exact ordering convention used for Kendall tau. This is not sufficient
+  to claim a reliable real-time dot-com forecast.
+
+Observed values: Lehman case
+----------------------------
+Event date: 2008-09-15
+Available diagnostic interval: 2007-09-18 through 2008-09-12
+Available observations: 250 trading days
+
+TDA L1, w=50:
+  first value = 0.000002111
+  last value  = 0.000006890
+  maximum     = 0.000012843 on 2008-08-27
+
+TDA L1, w=100:
+  first value = 0.000002500
+  last value  = 0.000008051
+  maximum     = 0.000015877 on 2008-04-16
+
+500-day statistics of the w=50 norm:
+  variance:
+    first = 3.215e-13
+    last  = 5.393e-12
+    Kendall tau toward the event = -0.888 in the existing report
+  low-frequency spectral power:
+    first = 5.162e-12
+    last  = 1.490e-10
+    Kendall tau toward the event = -0.690 in the existing report
+  lag-1 ACF:
+    first = 0.9048
+    last  = 0.9655
+    Kendall tau toward the event = -0.417 in the existing report
+
+The raw values show the substantive pattern more clearly than the signed
+tau labels: variance rises by about 16.8 times, low-frequency power rises
+by about 28.9 times, and the TDA L1 norm also rises into late August and
+September. This is the strongest retrospective warning pattern in this
+rerun. It still does not prove that a live observer could have selected the
+Lehman date in advance, because no alarm threshold or false-positive rule
+was specified.
+
+Why the current results cannot show "all events were completely predictable"
+---------------------------------------------------------------------------
+1. The event dates were supplied in advance. The analysis is therefore
+   event-conditioned and retrospective.
+2. There is no pre-registered alarm rule. Without a rule, "the curve was
+   rising" cannot be scored as a prediction.
+3. There is no control sample with a fixed false-alarm calculation in the
+   original paper.
+4. The dot-com period is truncated by the 1997 start of the supplied data.
+5. The low-frequency cutoff is unspecified in the paper and assumed here.
+6. The original study contains only two named events, which is inadequate
+   for estimating generalization, sensitivity, or false-positive rates.
+7. A warning curve can rise during a normal volatile period and then fail
+   to precede a crash. That is exactly why a real-time evaluation must use
+   rolling out-of-sample thresholds and include non-crash periods.
+
+What can honestly be said
+-------------------------
+The method detects a change in the joint four-index return geometry and
+its persistence-landscape norms become visibly larger around high-stress
+periods. In this rerun, the Lehman period shows a clear increase in TDA
+norms, rolling variance, and low-frequency power before the event. The
+dot-com period shows elevated TDA norms and some upward diagnostic
+movement, but not a clean, fully specified, numerically reproducible
+forecast signal.
+
+The correct presentation language is:
+
+  "The indicators provide retrospective early-warning evidence, strongest
+   for the 2008 crisis, but the paper does not establish that crashes were
+   completely predictable. An operational prediction claim requires a
+   threshold chosen without looking at the event, a lead-time definition,
+   and evaluation across many crash and non-crash periods."
+
+The plots in paper_reproduction_figures/ are intended to show that exact
+distinction: the four prices and TDA norms are descriptive trajectories;
+the rolling statistics show the paper's diagnostic quantities; and the
+ordinary-day bands provide context without pretending to be a validated
+alarm threshold.

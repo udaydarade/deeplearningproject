@@ -1,0 +1,17 @@
+Exact Gidea-Katz early-warning replication
+
+What the paper actually did:
+- Daily log returns of four indices formed the 4D point cloud.
+- TDA point-cloud windows: w=50 and w=100 trading days; one-day slide.
+- The paper displayed 1,000 trading days before each event (Figure 10).
+- It then used a separate 500-trading-day rolling window on the resulting norm series.
+- It evaluated variance, average low-frequency spectral density, and lag-1 ACF over the 250 trading days before 2000-03-10 and 2008-09-15 (Figure 11).
+- It did not use an L1 threshold, binary label, or operational forecast date. The claim is an early-warning trend, not a point prediction.
+
+Reproduction detail:
+- Low-frequency power here is the mean of FFT bins 1..5; the paper does not state a numeric frequency cutoff in the text, so this implementation cannot claim an exact spectral-bin reproduction.
+- dotcom_2000_03_10: Kendall tau toward event: variance=0.258, low-frequency power=0.678, ACF(1)=0.723.
+- lehman_2008_09_15: Kendall tau toward event: variance=-0.888, low-frequency power=-0.690, ACF(1)=-0.417.
+
+Interpretation: the figure shows exactly what could count as advance evidence: a sustained upward movement in the 500-day low-frequency spectral-density curve during the final 250 trading days. This rerun is not a perfect numerical reproduction of the paper's reported spectral result because its frequency-bin cutoff is not specified and the supplied CSV is Close-derived rather than a separately retrieved adjusted-close series.
+No parameter was changed to force agreement.

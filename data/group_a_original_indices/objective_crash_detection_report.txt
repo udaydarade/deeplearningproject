@@ -1,0 +1,178 @@
+OBJECTIVE CRASH EPISODES AND DETECTION PERFORMANCE
+==================================================
+
+This report does not define events from news labels such as "dot-com",
+"Lehman", "COVID", or "2022 bear market". Every episode below is produced
+from the observed S&P 500 prices and a fixed forward-return rule.
+
+Objective label definition
+--------------------------
+For each trading date t, calculate the minimum S&P 500 return over the next
+15 trading days:
+
+    forward_min_return(t) =
+        min_k [(P[t+k] - P[t]) / P[t]],  k = 1,...,15
+
+The threshold is the 2nd percentile of the full-sample distribution:
+
+    theta = -0.1141326196  =  -11.4133%
+
+A date is labeled positive when forward_min_return(t) <= theta. Consecutive
+positive dates are collapsed into one episode. This makes the episode start
+an objective signal-origin date: from that date, the next 15 trading days
+contain an observed drawdown of at least 11.4133%.
+
+The current Group A price sample contains 7,475 prices from 1997-01-03
+through 2026-09-21, with 7,460 valid forward-label dates. It contains 150
+positive dates collapsed into 31 contiguous episodes.
+
+Important interpretation
+------------------------
+The label is a forward-looking evaluation target. It is suitable for asking
+"did an indicator rise before a large future drawdown?" It is not a claim
+that an investor knew the future drawdown on the label date.
+
+For each objective episode, the existing detector diagnostics searched the
+five trading observations before through five observations after the label
+run. A metric was counted as detected when it first exceeded:
+
+    mean(metric over previous 100 available observations)
+      + 1.5 * standard deviation(metric over those observations)
+
+This threshold is fixed from prior observations for each episode and metric.
+The reported lead is the calendar-day difference between the episode start
+and the first exceedance. A positive lead means the exceedance happened
+before the objective label start. Results are aggregated across point-cloud
+windows 30, 50, and 100. This is a transparent retrospective diagnostic,
+not a fully pre-registered trading strategy.
+
+Objective episodes
+------------------
+The following are the 31 episodes generated from the forward-return rule.
+The "start drawdown" is the realized minimum return over the next 15
+trading days at the first positive label date. The peak-to-trough column is
+the decline within the contiguous positive-label run and can be zero for a
+one-day run; it is not the label definition.
+
+ID  start       end         start drawdown   run peak-to-trough
+01  1998-08-10  1998-08-10      -11.62%             0.00%
+02  1998-08-12  1998-08-12      -11.71%             0.00%
+03  1998-08-17  1998-08-26      -11.66%            -1.81%
+04  2001-03-07  2001-03-08      -11.44%             0.00%
+05  2001-08-22  2001-09-06      -12.80%            -6.63%
+06  2001-09-10  2001-09-10      -11.60%             0.00%
+07  2002-06-27  2002-07-17      -14.42%            -9.05%
+08  2002-09-16  2002-09-16      -11.88%             0.00%
+09  2008-09-08  2008-09-08      -12.73%             0.00%
+10  2008-09-11  2008-09-12      -11.42%             0.00%
+11  2008-09-16  2008-10-08      -17.91%           -21.52%
+12  2008-10-13  2008-10-14      -15.39%            -0.53%
+13  2008-10-20  2008-10-20      -13.85%             0.00%
+14  2008-10-29  2008-11-18      -13.28%           -15.41%
+15  2009-01-02  2009-01-06      -13.58%             0.00%
+16  2009-01-08  2009-01-08      -11.49%             0.00%
+17  2009-02-05  2009-02-20      -13.09%           -11.48%
+18  2009-02-24  2009-02-25      -12.50%            -1.07%
+19  2011-07-18  2011-08-01      -14.25%            -4.32%
+20  2018-11-29  2018-12-06      -11.73%            -3.38%
+21  2020-02-06  2020-02-06      -11.70%             0.00%
+22  2020-02-10  2020-03-11      -11.87%           -19.04%
+23  2020-03-13  2020-03-13      -17.47%             0.00%
+24  2020-03-17  2020-03-17      -11.54%             0.00%
+25  2022-04-20  2022-04-20      -11.76%             0.00%
+26  2022-05-27  2022-05-27      -11.82%             0.00%
+27  2022-06-02  2022-06-02      -12.21%             0.00%
+28  2022-06-07  2022-06-07      -11.87%             0.00%
+29  2022-09-09  2022-09-12      -11.84%             0.00%
+30  2025-03-19  2025-03-27      -12.20%            -1.44%
+31  2025-04-01  2025-04-02      -11.54%             0.00%
+
+Detection results across the 31 objective episodes
+---------------------------------------------------
+The detector outputs are aggregated over windows 30, 50, and 100:
+
+  TDA L1 detected in at least one tested window:       8 / 31 (25.8%)
+  rolling variance detected in at least one window:  24 / 31 (77.4%)
+  GARCH volatility detected in at least one window:  23 / 31 (74.2%)
+
+These are detection counts, not accuracy counts. A detector can exceed its
+baseline during a positive episode without doing so before the episode
+starts. It can also exceed the baseline in ordinary periods that are not
+labeled positive. A proper precision/recall study would need to count those
+negative-period alarms too.
+
+Episode-level outcomes by objective date
+-----------------------------------------
+For compactness, "TDA", "VAR", and "GARCH" below mean detected in at least
+one of windows 30/50/100:
+
+ID  start       TDA   VAR   GARCH
+01  1998-08-10  no    yes   yes
+02  1998-08-12  no    yes   yes
+03  1998-08-17  no    yes   yes
+04  2001-03-07  yes   yes   yes
+05  2001-08-22  no    no    no
+06  2001-09-10  no    no    yes
+07  2002-06-27  yes   yes   yes
+08  2002-09-16  no    yes   no
+09  2008-09-08  yes   yes   yes
+10  2008-09-11  no    yes   yes
+11  2008-09-16  no    yes   yes
+12  2008-10-13  no    yes   yes
+13  2008-10-20  no    yes   yes
+14  2008-10-29  no    yes   yes
+15  2009-01-02  no    yes   no
+16  2009-01-08  no    no    no
+17  2009-02-05  no    no    no
+18  2009-02-24  yes   no    no
+19  2011-07-18  yes   yes   yes
+20  2018-11-29  no    yes   yes
+21  2020-02-06  yes   no    yes
+22  2020-02-10  yes   yes   yes
+23  2020-03-13  no    yes   yes
+24  2020-03-17  no    yes   yes
+25  2022-04-20  yes   yes   no
+26  2022-05-27  no    yes   yes
+27  2022-06-02  no    yes   yes
+28  2022-06-07  no    yes   yes
+29  2022-09-09  no    no    no
+30  2025-03-19  no    yes   yes
+31  2025-04-01  no    yes   yes
+
+What this objective analysis says
+----------------------------------
+1. The forward-return rule finds many more objective episodes than the two
+   named cases in the original paper. Several episodes occur close together
+   because each date is evaluated separately over the next 15 trading days.
+   This is expected for a rolling forward-loss label and is not evidence
+   that the market experienced 31 independent macroeconomic crises.
+
+2. Rolling variance and GARCH respond to the objective episodes much more
+   often than TDA L1 under the current +1.5 standard-deviation diagnostic.
+   That is a measured result, not a weakness artificially imposed on TDA.
+
+3. TDA detects some objective episodes, including parts of the 2001–2002,
+   2008, 2011, 2020, and 2022 periods, but it misses most objective
+   episodes under this operational baseline rule.
+
+4. The objective episode label is generated with a 15-day future horizon.
+   Therefore a positive date is defined because a future loss eventually
+   occurs; it is not itself the date on which a crash visibly began.
+   Any lead-time claim must compare the indicator's first alarm date with
+   this objective label start and must be reported separately from the
+   future drawdown that created the label.
+
+5. The method therefore detects elevated volatility and some topological
+   stress, but the current evidence does not show that the objective
+   crashes were completely predictable beforehand. The honest measurable
+   statement is that, under this particular fixed label and baseline rule,
+   TDA L1 detected 8 of 31 positive episodes, while rolling variance and
+   GARCH detected 24 and 23 respectively.
+
+Reproducibility files
+---------------------
+  - labels_N15.csv: daily forward-return labels
+  - episode_diagnostics.csv: per-episode, per-window detection details
+  - episode_extension_report.txt: source methodology and episode listing
+  - tda_norms.csv: original TDA output used by the episode diagnostics
+  - csd_indicators_extended.csv: rolling classical indicators

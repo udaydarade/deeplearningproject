@@ -1,0 +1,23 @@
+TDA replication report
+Input returns: C:\Users\udayd\OneDrive\Desktop\deep learning\data\group_a_original_indices\returns.csv
+Input date range: 1997-01-03 to 2026-09-21 (7475 rows)
+Method: raw daily log-returns from the four indices; no rolling standardization or smoothing.
+Filtration: Ripser Vietoris-Rips, Euclidean metric, maxdim=1; infinite H1 bars excluded.
+Landscape norms: exact integrals from finite H1 bars (L1=sum persistence^2/4; L2=sqrt(sum persistence^3/12)).
+Plots show numerical L1/L2 and the bar-length L1 proxy; the CSV also contains a bar-length L2 proxy.
+
+Peak and period diagnostics (descriptive, not a causal test):
+
+window=50
+landscape_l1: {'peak_date': '2000-04-24', 'peak_value': 3.81589829850041e-05, 'dotcom_max': 3.81589829850041e-05, 'pre_dotcom_max': 2.3162266408637954e-05, 'financial_max': 2.382157137143827e-05}
+landscape_l2: {'peak_date': '2000-03-14', 'peak_value': 0.00029098599433503847, 'dotcom_max': 0.00029098599433503847, 'pre_dotcom_max': 0.00021308718884409882, 'financial_max': 0.00021312321096548576}
+bar_length_l1_proxy: {'peak_date': '2000-04-24', 'peak_value': 0.031333647668361664, 'dotcom_max': 0.031333647668361664, 'pre_dotcom_max': 0.02238987758755684, 'financial_max': 0.01942649483680725}
+
+window=100
+landscape_l1: {'peak_date': '2000-04-13', 'peak_value': 6.970792928660233e-05, 'dotcom_max': 6.970792928660233e-05, 'pre_dotcom_max': 3.340998353502044e-05, 'financial_max': 3.21812329164846e-05}
+landscape_l2: {'peak_date': '2000-04-17', 'peak_value': 0.0004654713935971307, 'dotcom_max': 0.0004654713935971307, 'pre_dotcom_max': 0.0002298063352031265, 'financial_max': 0.00023235378280737204}
+bar_length_l1_proxy: {'peak_date': '2000-04-13', 'peak_value': 0.05490144994109869, 'dotcom_max': 0.05490144994109869, 'pre_dotcom_max': 0.045875681564211845, 'financial_max': 0.039295089431107044}
+
+Interpretation: assess qualitative consistency by checking whether norms rise before or during the shaded crash periods.
+No parameter tuning was performed to force agreement. Differences from the paper can arise from data vendor history,
+window anchoring, per-coordinate standardization, Euclidean distance, finite-grid integration, and using H1 only.

@@ -1,0 +1,41 @@
+Ismail et al. (2022) reproduction on Group A
+
+Paper procedure implemented:
+- Four US indices and raw daily log returns.
+- 50-trading-day sliding point clouds and H1 persistence-landscape L1 norm.
+- 500-value rolling AC1, variance, and mean low-frequency power spectrum (MPS).
+- 250-value sliding correlation tests using Kendall, Pearson, and Spearman.
+- Significant positive trend requires p < 0.05; event-trained threshold is the smaller positive significant correlation at the two event dates, then applied across the available timeline.
+
+Reproduction limitations:
+- The supplied data begins in 1997, while the paper begins in 1987. Therefore the dot-com pre-crisis sample cannot contain the paper's full 1,000 prices.
+- The paper's accessible text does not specify a numeric low-frequency cutoff. This script uses the first five nonzero FFT bins.
+- Event-trained thresholds are retrospective by design, matching the paper's evaluation concept; they are not valid out-of-sample thresholds.
+- The paper's reported PSA/PEA percentages cannot be claimed as reproduced without its exact original data, exact frequency cutoff, and exact breakpoint implementation.
+
+Event-day trend results:
+dotcom ac1: Kendall r=-0.7833, p=5.314e-76; Pearson r=-0.8660, p=1.269e-76; Spearman r=-0.9113, p=1.438e-97
+dotcom variance: Kendall r=-0.2299, p=6.106e-08; Pearson r=0.1231, p=0.05195; Spearman r=-0.2208, p=0.0004354
+dotcom mps_low_frequency: Kendall r=-0.6070, p=2.31e-46; Pearson r=-0.8289, p=1.627e-64; Spearman r=-0.7957, p=6.193e-56
+lehman ac1: Kendall r=0.4168, p=9.551e-23; Pearson r=0.7919, p=4.72e-55; Spearman r=0.7031, p=1.374e-38
+lehman variance: Kendall r=0.8876, p=4.8e-97; Pearson r=0.8664, p=8.984e-77; Spearman r=0.9713, p=1.015e-156
+lehman mps_low_frequency: Kendall r=0.6902, p=2.023e-59; Pearson r=0.8548, p=1.362e-72; Spearman r=0.8829, p=2.083e-83
+
+Event-trained thresholds and full-history signal prevalence:
+ac1 / kendall: threshold=0.421301; signal dates=1835/6678 (27.48%)
+ac1 / pearson: threshold=0.793627; signal dates=1170/6678 (17.52%)
+ac1 / spearman: threshold=0.706441; signal dates=1372/6678 (20.55%)
+variance / kendall: threshold=0.887614; signal dates=163/6678 (2.44%)
+variance / pearson: threshold=0.153126; signal dates=2590/6678 (38.78%)
+variance / spearman: threshold=0.971320; signal dates=190/6678 (2.85%)
+mps_low_frequency / kendall: threshold=0.691245; signal dates=887/6678 (13.28%)
+mps_low_frequency / pearson: threshold=0.850471; signal dates=1027/6678 (15.38%)
+mps_low_frequency / spearman: threshold=0.883048; signal dates=839/6678 (12.56%)
+
+Comparison with the published 2022 paper:
+- The paper reports whole-history PSA/PEA of 42.31%/57.69% for Kendall, 40%/60% for Pearson, and 46.15%/53.85% for Spearman when using L1 with MPS.
+- Those percentages are not reproduced here as exact values because the available project data starts in 1997 rather than 1987, the source paper does not state the numeric MPS frequency cutoff, and its breakpoint/counting implementation is not fully specified in the accessible text.
+- In this data rerun, the dot-com event-day MPS trend is negative for all three tests, while the Lehman event-day MPS trend is positive and highly significant for all three. This is a material mismatch with the paper's claimed positive MPS trend before both events.
+- The classification timeline is saved so the event-trained threshold procedure can be inspected directly.
+
+Generated files: indicators.csv, trend_tests.csv, event_day_tests.csv, thresholds.csv, classification_timeline.csv, ismail_2022_reproduction.png.
