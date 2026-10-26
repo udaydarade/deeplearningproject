@@ -253,7 +253,11 @@ py -3.12 -m streamlit run cross_index_app.py
 This writes to `data/cross_index_forecasting/` without replacing the existing
 TDA/CSD experiment. The app accepts daily closing-price CSVs with `date`,
 `^GSPC`, `^DJI`, `^IXIC`, and `^RUT` columns. Results are documented in the
-cross-index addendum in `FINAL_PROJECT_REPORT.md`.
+cross-index addendum in `FINAL_PROJECT_REPORT.md`. The interface validates and
+charts the uploaded prices, compares target-history, peer-only, and all-index
+scores, and provides a scored-CSV download. For a quick demo, choose the
+bundled sample; for inference, the three trained checkpoints and their scalers
+must be present under `data/cross_index_forecasting/`.
 
 ## V5, V6, and V7 synthesis
 
