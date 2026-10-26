@@ -23,6 +23,8 @@ dist/
 .env.*
 !.env.example
 
+pipeline*/
+
 # Logs and editor/OS metadata
 *.log
 .coverage
@@ -38,3 +40,6 @@ Thumbs.db
 # Regenerated output from the cross-asset extension.
 # Source CSV inputs elsewhere under data/ remain trackable.
 data/extension/
+data/
+*.parquet
+*.csv

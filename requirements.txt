@@ -9,3 +9,10 @@ arch
 ripser
 yfinance
 pandas_datareader
+scikit-learn
+joblib
+torch
+streamlit
+lightgbm
+pyarrow
+numba

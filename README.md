@@ -21,14 +21,14 @@ Windows PowerShell:
 ```powershell
 py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+py -m pip install --upgrade pip
+py -m pip install -r requirements.txt
 ```
 
 If PowerShell blocks activation, run the scripts with the interpreter directly:
 
 ```powershell
-.\.venv\Scripts\python.exe <script-name>.py
+py -3.12 <script-name>.py
 ```
 
 Python 3.10+ is recommended. The dependency list includes the numerical,
@@ -38,7 +38,7 @@ scripts.
 ### 2. Run the main cross-asset extension
 
 ```powershell
-python run_cross_asset_extension.py
+py -3.12 run_cross_asset_extension.py
 ```
 
 This command downloads the sector data needed for the extension, reads the
@@ -167,3 +167,190 @@ Before opening a pull request:
 Reference figures and the paper source used for reproduction work are stored
 under `paper_source/`. Preserve the accompanying citation and licensing
 information when redistributing those materials.
+
+## Out-of-sample crash forecasting and interface
+
+The forecasting deliverables use the four original US indices. Generate the
+TDA/CSD feature panel, train three LSTM feature ablations, and create the
+walk-forward results with:
+
+```powershell
+py -3.12 crash_forecasting.py
+py -3.12 forecasting_qualitative.py
+```
+
+The target threshold for each index is its 2nd percentile forward 15-session
+minimum return over the 1997–2006 calibration period. The threshold is held
+fixed afterward. Test blocks are 2011–2015, 2016–2020, and 2021 onward; all
+model features use information through the forecast date, and training is
+purged 25 calendar days before each test block. Reports, trained model
+weights, scalers, panel CSV, test metrics, threshold CSV, and event-aligned
+figures are written under `data/forecasting/`.
+
+To train on the larger cross-asset extension panel instead of only the four
+original indices, first regenerate the panel if needed and then run:
+
+```text
+py -3.12 run_cross_asset_extension.py
+py -3.12 cross_asset_forecasting.py
+```
+
+This produces `data/forecasting/cross_asset_walk_forward_metrics.csv`, saved
+cross-asset LSTM artifacts, and a report with per-group row and label counts.
+The cross-asset benchmark keeps the same chronological holdouts and boundary
+purge used by the original benchmark.
+
+### Peer-index deep-learning forecast
+
+The separate `peer_index_forecasting.py` experiment tests whether the other
+indices can warn about a target index crash. For each target, its own returns
+are excluded from the input; the model receives only the other indices'
+recent returns, volatility, dispersion, and correlation. It evaluates the
+existing GRU and Transformer implementations without changing the original
+CSD/TDA or model-zoo outputs:
+
+```text
+py -3.12 peer_index_forecasting.py
+```
+
+Results are written to `data/forecasting/peer_index_deep_learning_metrics.csv`.
+
+The target-specific v2 experiment goes further by training one model per
+target, adding richer peer-only dynamics, and selecting a validation ensemble
+from GRU, attention-BiLSTM, TCN, and Transformer models:
+
+```text
+py -3.12 peer_index_forecasting_v2.py
+```
+
+Its results are written to
+`data/forecasting/peer_index_deep_learning_v2_metrics.csv`.
+
+To launch the CSV upload interface:
+
+```powershell
+py -3.12 -m pip install -r requirements.txt
+py -3.12 -m streamlit run forecast_app.py
+```
+
+Upload the generated `data/forecasting/modeling_panel.csv` as a demo, or a CSV
+with `date`, `ticker`, and all feature columns listed in the saved model
+bundle. The interface reports a risk score, not a calibrated probability.
+See `FINAL_PROJECT_REPORT.md` for the methodology and current findings.
+
+### Cross-index deep learning experiment
+
+The independent cross-market experiment compares a target-only sequence model,
+a peer-only temporal attention model that masks the target index's full input
+history, and an all-index temporal attention model. It uses return, momentum,
+volatility, downside-risk, and drawdown features. Run:
+
+```powershell
+py -3.12 cross_index_forecasting.py
+py -3.12 -m streamlit run cross_index_app.py
+```
+
+This writes to `data/cross_index_forecasting/` without replacing the existing
+TDA/CSD experiment. The app accepts daily closing-price CSVs with `date`,
+`^GSPC`, `^DJI`, `^IXIC`, and `^RUT` columns. Results are documented in the
+cross-index addendum in `FINAL_PROJECT_REPORT.md`.
+
+## V5, V6, and V7 synthesis
+
+The later experiments remain additive: V5/V6/V7 outputs do not delete or
+replace the earlier TDA/CSD, benchmark, or peer-model results.
+
+### V5 full-history topology work
+
+V5 inventories the global panel at approximately 159 assets and 1.17 million
+asset-date rows spanning roughly 1927–2026. It evaluates scale-normalized
+TDA, landscape dynamics, clustering/network blocks, and PRICE1D features. The
+completed era results are in `data/v5/e1_results.csv`; E2 remains resumable
+from `data/v5/e2_v7_final_checkpoint.csv`, and E3 deep-model output is written
+to `data/v5/e3_results.csv` while its process runs.
+
+### V6 asymmetric and real-time results
+
+V6 adds asymmetric SEMIVAR/momentum features and evaluates causal Scheme W
+alarms. The archived result tables under
+`data/v6/archive_pre_forward_label_fix_20261025/` show the strongest verified
+downside result in the available Scheme W summary for
+`BEST_SET_SEMIVAR` at N=15: mean AP approximately 0.462 and mean ROC AUC
+approximately 0.935 across seven datasets. At N=5, the corresponding mean AP
+is approximately 0.339 and mean ROC AUC approximately 0.892. These are
+summary values across folds/datasets, not per-ticker guarantees.
+
+### V7 final synthesis
+
+V7 completed all 240 configured cells:
+
+- Horizons: N=5 and N=15, 2nd-percentile downside labels.
+- Feature ladder: `CLASSICAL_CSD`, `SEMIVAR_MOM`, `PEER_CROSS`,
+  `TDA_ONLY_NORM`, and `GRAND_COMBINED`.
+- Models: Logistic Regression, LightGBM, GRU, and TCN.
+- Deep-model seeds: 42, 43, and 44.
+- Folds: 2011–2015, 2016–2020, and 2021+ with a 25-session purge.
+- Alarm rule: causal rolling 250-session 95th-percentile threshold.
+
+The complete V7 table is
+`data/v7_final/v7_ablation_results.csv`. The corrected event-level forecast
+ledger is under `data/v7_final/precrash_ledger/`. In that ledger, a model is
+counted as detecting a crash only when an alarm occurs strictly before
+`crash_start`; an alarm during an already active crash is not a successful
+prediction.
+
+The V7 results are complete for their configured folds, but they should not be
+described as a full-history test over every date from 1927 onward until the
+additional historical V7 folds are run. The full-history observed crash
+population and the model-score coverage population are reported separately in
+`data/v7_final/crash_stats/observed_crash_events.csv`.
+
+### Headline findings currently supported by saved outputs
+
+- The V6 real-time downside SEMIVAR configuration is the strongest broad
+  result in the saved Scheme W summary: at N=15 it reaches mean AP about
+  **0.462** and mean ROC AUC about **0.935** across seven dataset folds.
+- At N=5, the same V6 configuration reaches mean AP about **0.339** and mean
+  ROC AUC about **0.892**.
+- V7 contains a complete 240-cell ablation matrix. One illustrative
+  N=15/2016–2020 cell, `PEER_CROSS` + TCN, has AP **0.0555**, ROC AUC
+  **0.7893**, and event recall **1.000** in that fold; this is a fold-specific
+  result, not a universal or full-history rate.
+- The V7 strict pre-crash ledger evaluates alarms before onset in 1-, 5-, 10-,
+  20-, and 60-session windows. It deliberately excludes alarms that occur
+  during an already active crash.
+- The original TDA replication remains descriptive: its S&P 500 H1 landscape
+  norms show their largest saved peaks around the 2000 dot-com period, but
+  that file is not a causal out-of-sample forecasting claim.
+
+## Updated Streamlit demos
+
+Launch the original-indicator demo:
+
+```powershell
+py -3.12 -m streamlit run forecast_app.py
+```
+
+It now shows the V7 ablation summary and a strict pre-crash event lookup before
+the upload scorer. Upload scoring still uses the saved LSTM artifact and is
+clearly labeled as a score, not a calibrated probability.
+
+Launch the peer/cross-index demo:
+
+```powershell
+py -3.12 -m streamlit run cross_index_app.py
+```
+
+It now shows the related V7 summary before accepting a four-index price CSV.
+Both apps keep the original upload workflows and do not retrain models.
+
+## Reproducibility and report index
+
+- [MASTER_DATA_AND_METHODS_BIBLE.md](MASTER_DATA_AND_METHODS_BIBLE.md) —
+  compact evidence-backed methods, environment, status, and result index.
+- [V6_EXPERIMENT_REPORT.md](V6_EXPERIMENT_REPORT.md) — V6-only report.
+- [PRECRASH_MODEL_LEDGER.md](PRECRASH_MODEL_LEDGER.md) — strict forecast
+  detection definition and event-level outputs.
+- [CRASH_BY_CRASH_MODEL_LEDGER.md](CRASH_BY_CRASH_MODEL_LEDGER.md) — legacy
+  in-crash audit ledger, retained for transparency but not used as evidence of
+  advance prediction.
